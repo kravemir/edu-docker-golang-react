@@ -13,7 +13,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN go build -o ./app main.go
+RUN go build -o ./app
 
 
 FROM alpine:${ALPINE_VERSION}

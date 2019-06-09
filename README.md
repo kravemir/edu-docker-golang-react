@@ -2,11 +2,10 @@
 
 ## Run
 
-Just build and run docker image:
+Just run docker compose:
 
 ```bash
-docker build -t toy-docker-golang-react .
-docker run -it -p 8080:8080 toy-docker-golang-react
+docker-compose up --build
 ```
 
 Access the web: http://localhost:8080/ping
@@ -21,3 +20,9 @@ Population of `go.mod` and `go.sum`:
   ```bash
   go build
   ```
+
+Connecting to DB:
+
+```bash
+docker-compose exec db sh -c 'PGPASSWORD=tralalala psql -h db -U postgres'
+```
