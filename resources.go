@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
@@ -9,9 +10,11 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type TodoResource struct {
-	db *gorm.DB
-}
+type (
+	TodoResource struct {
+		db *gorm.DB
+	}
+)
 
 func (m *todoModel) toDto() todoDto {
 	return todoDto{
@@ -34,6 +37,19 @@ func (r *TodoResource) fetchAllTodo(c *gin.Context) {
 }
 
 func (r *TodoResource) fetchSingleTodo(c *gin.Context) {
+	var model todoModel
+	id := c.Param("id")
+	r.db.First(&model, id)
+
+	if model.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("Todo with ID=%s not found!", id),
+		})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, model.toDto())
 }
 
 func (r *TodoResource) createTodo(c *gin.Context) {
@@ -53,9 +69,37 @@ func (r *TodoResource) createTodo(c *gin.Context) {
 }
 
 func (r *TodoResource) updateTodo(c *gin.Context) {
+	dto := todoDto{}
+	if err := c.BindJSON(&dto); err != nil {
+		c.Error(err)
+	}
+
+	var model todoModel
+	id := c.Param("id")
+	r.db.First(&model, id)
+
+	r.db.Model(&model).Update("Title", dto.Title)
+	r.db.Model(&model).Update("Content", dto.Content)
+
+	c.JSON(http.StatusCreated, model.toDto())
+
 }
 
 func (r *TodoResource) deleteTodo(c *gin.Context) {
+	var model todoModel
+	id := c.Param("id")
+	r.db.First(&model, id)
+
+	if model.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("Todo with ID=%s not found!", id),
+		})
+		return
+	}
+
+	r.db.Delete(&model)
+	c.IndentedJSON(http.StatusOK, model.toDto())
 }
 
 func todoResources(db *gorm.DB, g *gin.RouterGroup) {
