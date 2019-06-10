@@ -4,7 +4,7 @@ FROM node:${NODE_VERSION}-alpine AS builder
 
 RUN apk add --no-cache util-linux
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
