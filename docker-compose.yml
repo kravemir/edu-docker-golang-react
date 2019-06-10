@@ -17,3 +17,14 @@ services:
       - 8080:8080
     links:
       - db
+  fe:
+    build:
+      context: fe
+      dockerfile: Dockerfile
+    restart: always
+    expose:
+      - 1234
+      - 1235
+    ports:
+      - 1234:1234
+      - 1235:1235
