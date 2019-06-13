@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.4'
 
 services:
   db:
@@ -6,22 +6,28 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: tralalala
+    networks:
+      - overlay
   app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
+    networks:
+      - overlay
     expose:
       - 8080
     ports:
       - 8080:8080
-    links:
+    depends_on:
       - db
   fe:
     build:
       context: fe
       dockerfile: Dockerfile
     restart: always
+    networks:
+      - overlay
     expose:
       - 1234
       - 1235
@@ -30,3 +36,6 @@ services:
       - 1235:1235
     volumes:
       - './fe:/app'
+
+networks:
+  overlay:
