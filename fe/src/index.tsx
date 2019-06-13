@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Component } from "react"
 import { render } from "react-dom"
+import axios from "axios";
 // import "./index.css"
 
 class App extends Component {
@@ -37,6 +38,25 @@ class TodoList extends Component {
     var entries = [...this.state.entries]
     var filteredEntries = entries.filter(e => e.id != id);
     this.setState({entries: filteredEntries})
+  }
+  componentDidMount() {
+    this.reloadTodos()
+  }
+  reloadTodos() {
+    axios
+      .get("/api/v1/todos/")
+      .then(response => {
+        const newTodos = response.data.map(c => {
+          return {
+            id: c.ID,
+            title: c.Title,
+            content: c.Content
+          };
+        });
+
+        this.setState({entries: newTodos});
+      })
+      .catch(error => console.log(error));
   }
   render() {
     return (
