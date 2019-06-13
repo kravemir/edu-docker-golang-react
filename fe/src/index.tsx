@@ -2,7 +2,16 @@ import * as React from "react"
 import { Component } from "react"
 import { render } from "react-dom"
 import axios from "axios";
-// import "./index.css"
+
+import "./index.scss"
+
+function chunkArrayInGroups(arr, size) {
+  var myArray = [];
+  for(var i = 0; i < arr.length; i += size) {
+    myArray.push(arr.slice(i, i+size));
+  }
+  return myArray;
+}
 
 class App extends Component {
   render() {
@@ -60,13 +69,18 @@ class TodoList extends Component {
   }
   render() {
     return (
-      <ul>
-        {this.state.entries.map((entry, i) => <TodoEntry
-          key = {entry.id}
-          entry = {entry}
-          onRemove = {() => this.removeEntry(entry.id)}
-        />)}
-      </ul>
+      <div className="container">
+        {chunkArrayInGroups(this.state.entries, 4).map((entries, i) =>
+          <div key={i} className="row">
+            {entries.map((entry, j) => <TodoEntry
+              className="col-sm-3"
+              key = {j}
+              entry = {entry}
+              onRemove = {() => this.removeEntry(entry.id)}
+            />)}
+          </div>
+        )}
+      </div>
     )
   }
 }
@@ -79,15 +93,15 @@ class TodoEntry extends Component {
   }
   render() {
     return (
-      <li><table><tbody><tr>
-        <td>
-          <div>{this.props.entry.title}</div>
-          <div>{this.props.entry.content}</div>
-        </td>
-        <td>
-          <button onClick = {() => this.handleRemove()}>Remove</button>
-        </td>
-      </tr></tbody></table></li>
+      <div className="card">
+        <div className="card-body">
+          <div className="card-title">{this.props.entry.title}</div>
+          <div className="card-text">
+            <p>{this.props.entry.content}</p>
+            <button className="btn btn-danger" onClick = {() => this.handleRemove()}>Remove</button>
+          </div>
+        </div>
+      </div>
     )
   }
 }
