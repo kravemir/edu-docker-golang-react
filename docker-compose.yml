@@ -8,9 +8,9 @@ services:
       POSTGRES_PASSWORD: tralalala
     networks:
       - overlay
-  app:
+  be:
     build:
-      context: .
+      context: be
       dockerfile: Dockerfile
     restart: always
     networks:
