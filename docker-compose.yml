@@ -17,8 +17,6 @@ services:
       - overlay
     expose:
       - 8080
-    ports:
-      - 8080:8080
     depends_on:
       - db
   fe:
@@ -29,13 +27,23 @@ services:
     networks:
       - overlay
     expose:
-      - 1234
       - 1235
     ports:
-      - 1234:1234
       - 1235:1235
     volumes:
       - './fe:/app'
+  nginx:
+    image: nginx:1.16.0-alpine
+    volumes:
+      - ./nginx/web.template:/etc/nginx/conf.d/web.template
+    networks:
+      - overlay
+    ports:
+      - "8080:8080"
+    command: /bin/sh -c "envsubst < /etc/nginx/conf.d/web.template > /etc/nginx/conf.d/web.conf && exec nginx -g 'daemon off;'"
+    depends_on:
+      - be
+      - fe
 
 networks:
   overlay:

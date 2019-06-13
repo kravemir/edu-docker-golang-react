@@ -1,0 +1,12 @@
+server {
+  listen 8080;
+  listen [::]:80;
+
+  location /api {
+    proxy_pass "http://be:8080/api";
+  }
+
+  location / {
+    proxy_pass "http://fe:1234/";
+  }
+}
