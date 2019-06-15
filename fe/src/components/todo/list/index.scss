@@ -1,31 +1,30 @@
 
 @import "node_modules/bootstrap/scss/bootstrap";
 
-.todo-list {
-  @include make-container();
+.todo-list-card {
+  @extend .card;
 
-  padding: 20px;
-
-  > div {
-    @include make-row();
-    margin: -10px;
-
-    > * {
-      @include make-col-ready();
-      padding: 10px;
-    }
-
-    > div {
-      @include media-breakpoint-up(sm) {
-        @include make-col(4);
-      }
-      @include media-breakpoint-up(lg) {
-        @include make-col(3);
-      }
-    }
-  }
+  margin: 25px;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.todo-list .card {
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+.todo-list-card-entries {
+  @extend .list-group;
+  @extend .list-group-flush;
+}
+
+.todo-list-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  > .content {
+    flex-basis: 1px;
+    flex-grow: 1;
+  }
+
+  > .buttons {
+    flex-grow: 0;
+  }
 }

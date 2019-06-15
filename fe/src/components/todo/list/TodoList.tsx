@@ -69,15 +69,20 @@ export class TodoList extends Component {
   }
   render() {
     return (
-      <div className="todo-list">
-        <div className="todo-list-row">
-          <div><TodoForm onCreate={(e) => this.createEntry(e)}/></div>
-          {this.state.entries.map((entry, i) => <div key = {entry.id}>
-            <TodoEntry
-              entry = {entry}
-              onRemove = {() => this.removeEntry(entry.id)}
-            />
-          </div>)}
+      <div className="todo-list-card">
+        <div class="card-header">
+          Yours todo list
+        </div>
+        <ul className="todo-list-card-entries">
+        {this.state.entries.map((entry, i) => <li key = {entry.id} className="list-group-item">
+          <TodoEntry
+            entry = {entry}
+            onRemove = {() => this.removeEntry(entry.id)}
+          />
+        </li>)}
+        </ul>
+        <div className="card-footer">
+          <TodoForm onCreate={(e) => this.createEntry(e)}/>
         </div>
       </div>
     )

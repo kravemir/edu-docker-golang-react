@@ -11,13 +11,10 @@ export class TodoEntry extends Component {
   }
   render() {
     return (
-      <div className="card">
-        <div className="card-body">
-          <div className="card-title">{this.props.entry.title}</div>
-          <div className="card-text">
-            <p>{this.props.entry.content}</p>
-            <button className="btn btn-danger" onClick = {() => this.handleRemove()}>Remove</button>
-          </div>
+      <div className="todo-list-entry">
+        <div className="content">{this.props.entry.content}</div>
+        <div className="buttons">
+          <button className="btn btn-link text-danger" onClick = {() => this.handleRemove()}>Remove</button>
         </div>
       </div>
     )

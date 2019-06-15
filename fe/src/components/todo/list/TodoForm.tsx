@@ -25,30 +25,17 @@ export class TodoForm extends Component {
   }
   render() {
     return (
-      <div className="card">
-        <form className="card-body inline-form">
-          <div className="card-title">
-            <input type="text"
-                   className="form-control form-control-sm"
-                   name="title"
-                   aria-describedby="emailHelp"
-                   placeholder="Title ..."
-                   onChange={(e) => this.handleInputChange(e)}
-                  />
-          </div>
-          <div className="card-text">
-            <div className="form-group">
-              <textarea className="form-control form-control-sm"
-                        name="content"
-                        rows="3"
-                        placeholder="Content ..."
-                        onChange={(e) => this.handleInputChange(e)}
-                        />
-            </div>
-            <button className="btn btn-success" onClick = {(e) => this.handleCreate(e)}>Add</button>
-          </div>
-        </form>
-      </div>
+      <form className="form">
+        <div className="form-group">
+          <textarea className="form-control form-control-sm"
+                    name="content"
+                    rows="3"
+                    placeholder="Content ..."
+                    onChange={(e) => this.handleInputChange(e)}
+                    />
+        </div>
+        <button className="btn btn-success" onClick = {(e) => this.handleCreate(e)}>Add</button>
+      </form>
     )
   }
 }
