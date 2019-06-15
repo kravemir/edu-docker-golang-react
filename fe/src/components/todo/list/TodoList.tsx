@@ -3,6 +3,7 @@ import { Component } from "react"
 import { render } from "react-dom"
 import axios from "axios";
 
+import { TodoForm } from "./TodoForm";
 import { TodoEntry } from "./TodoEntry";
 
 function chunkArrayInGroups(arr, size) {
@@ -31,6 +32,15 @@ export class TodoList extends Component {
         }
       ]
     }
+  }
+  createEntry(e){
+    axios
+      .post("/api/v1/todos", {
+        "Title": e.title,
+        "Content": e.content
+      })
+      .then(response => { this.reloadTodos(); })
+      .catch(error => console.log(error));
   }
   removeEntry(id) {
     axios
@@ -61,7 +71,8 @@ export class TodoList extends Component {
     return (
       <div className="todo-list">
         <div className="todo-list-row">
-          {this.state.entries.map((entry, i) => <div key = {i}>
+          <div><TodoForm onCreate={(e) => this.createEntry(e)}/></div>
+          {this.state.entries.map((entry, i) => <div key = {entry.id}>
             <TodoEntry
               entry = {entry}
               onRemove = {() => this.removeEntry(entry.id)}
