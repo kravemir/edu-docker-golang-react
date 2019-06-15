@@ -1,0 +1,27 @@
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.todo-list {
+  @include make-container();
+
+  padding: 20px;
+
+  > div {
+    @include make-row();
+    margin: -10px;
+
+    > * {
+      @include make-col-ready();
+      padding: 10px;
+    }
+
+    > div {
+      @include media-breakpoint-up(sm) {
+        @include make-col(4);
+      }
+      @include media-breakpoint-up(lg) {
+        @include make-col(3);
+      }
+    }
+  }
+}

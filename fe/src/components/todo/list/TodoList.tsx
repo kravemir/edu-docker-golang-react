@@ -58,17 +58,15 @@ export class TodoList extends Component {
   }
   render() {
     return (
-      <div className="container">
-        {chunkArrayInGroups(this.state.entries, 4).map((entries, i) =>
-          <div key={i} className="row">
-            {entries.map((entry, j) => <TodoEntry
-              className="col-sm-3"
-              key = {j}
+      <div className="todo-list">
+        <div className="todo-list-row">
+          {this.state.entries.map((entry, i) => <div key = {i}>
+            <TodoEntry
               entry = {entry}
               onRemove = {() => this.removeEntry(entry.id)}
-            />)}
-          </div>
-        )}
+            />
+          </div>)}
+        </div>
       </div>
     )
   }
