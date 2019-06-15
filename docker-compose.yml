@@ -12,11 +12,14 @@ services:
     build:
       context: be
       dockerfile: Dockerfile
+      target: hot-reload
     restart: always
     networks:
       - overlay
     expose:
       - 8080
+    volumes:
+      - './be:/app'
     depends_on:
       - db
   fe:

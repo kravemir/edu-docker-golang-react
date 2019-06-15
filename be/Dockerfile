@@ -1,19 +1,32 @@
 ARG GO_VERSION=1.12
 ARG ALPINE_VERSION=3.9
 
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS builder
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS base
 
-RUN apk update && apk add alpine-sdk git && rm -rf /var/cache/apk/*
+RUN apk update \
+  && apk add alpine-sdk git \
+  && rm -rf /var/cache/apk/* \
+  && mkdir -p /app
 
-RUN mkdir -p /app
 WORKDIR /app
 
-COPY go.mod .
-COPY go.sum .
+COPY go.mod go.sum ./
 RUN go mod download
 
+
+FROM base AS builder
+
 COPY . .
-RUN go build -o ./app
+RUN go build -o ./app -v
+
+
+FROM base AS hot-reload
+
+RUN go get github.com/githubnemo/CompileDaemon
+
+COPY . .
+
+ENTRYPOINT CompileDaemon -log-prefix=false -build="go build -o ./app -v" -command="./app"
 
 
 FROM alpine:${ALPINE_VERSION}
