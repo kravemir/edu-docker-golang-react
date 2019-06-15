@@ -33,9 +33,10 @@ export class TodoList extends Component {
     }
   }
   removeEntry(id) {
-    var entries = [...this.state.entries]
-    var filteredEntries = entries.filter(e => e.id != id);
-    this.setState({entries: filteredEntries})
+    axios
+      .delete("/api/v1/todos/" + id)
+      .then(response => { this.reloadTodos(); })
+      .catch(error => console.log(error));
   }
   componentDidMount() {
     this.reloadTodos()
