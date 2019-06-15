@@ -5,3 +5,8 @@ type todoDto struct {
 	Title   string
 	Content string
 }
+
+type listDto struct {
+	ID   uint
+	Name string
+}

@@ -9,11 +9,17 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type todoModel struct {
-	gorm.Model
-	Title   string
-	Content string
-}
+type (
+	todoModel struct {
+		gorm.Model
+		Title   string
+		Content string
+	}
+	listModel struct {
+		gorm.Model
+		Name string
+	}
+)
 
 func openAndInitDb() *gorm.DB {
 	db, err := gorm.Open("postgres", "host=db user=postgres dbname=postgres password=tralalala sslmode=disable")
@@ -22,6 +28,7 @@ func openAndInitDb() *gorm.DB {
 	}
 
 	db.AutoMigrate(&todoModel{})
+	db.AutoMigrate(&listModel{})
 
 	return db
 }

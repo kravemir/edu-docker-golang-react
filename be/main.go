@@ -8,8 +8,8 @@ func main() {
 
 	r := gin.Default()
 
-	todo := r.Group("/api/v1/todos")
-	todoResources(db, todo)
+	todoResources(db, r.Group("/api/v1/todos"))
+	listResources(db, r.Group("/api/v1/lists"))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

@@ -111,3 +111,102 @@ func todoResources(db *gorm.DB, g *gin.RouterGroup) {
 	g.PUT("/:id", r.updateTodo)
 	g.DELETE("/:id", r.deleteTodo)
 }
+
+type (
+	ListResource struct {
+		db *gorm.DB
+	}
+)
+
+func (m *listModel) toDto() listDto {
+	return listDto{
+		ID:   m.ID,
+		Name: m.Name,
+	}
+}
+
+func (r *ListResource) fetchAllList(c *gin.Context) {
+	lists := []listModel{}
+	r.db.Find(&lists)
+
+	listsDto := make([]listDto, len(lists))
+	for i, m := range lists {
+		listsDto[i] = m.toDto()
+	}
+
+	c.IndentedJSON(200, listsDto)
+}
+
+func (r *ListResource) fetchSingleList(c *gin.Context) {
+	var model listModel
+	id := c.Param("id")
+	r.db.First(&model, id)
+
+	if model.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("Todo with ID=%s not found!", id),
+		})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, model.toDto())
+}
+
+func (r *ListResource) createList(c *gin.Context) {
+	dto := listDto{}
+	if err := c.BindJSON(&dto); err != nil {
+		c.Error(err)
+	}
+
+	model := listModel{
+		Name: dto.Name,
+	}
+
+	r.db.Save(&model)
+
+	c.JSON(http.StatusCreated, model.toDto())
+}
+
+func (r *ListResource) updateList(c *gin.Context) {
+	dto := listDto{}
+	if err := c.BindJSON(&dto); err != nil {
+		c.Error(err)
+	}
+
+	var model listModel
+	id := c.Param("id")
+	r.db.First(&model, id)
+
+	r.db.Model(&model).Update("Name", dto.Name)
+
+	c.JSON(http.StatusCreated, model.toDto())
+
+}
+
+func (r *ListResource) deleteList(c *gin.Context) {
+	var model listModel
+	id := c.Param("id")
+	r.db.First(&model, id)
+
+	if model.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("Todo with ID=%s not found!", id),
+		})
+		return
+	}
+
+	r.db.Delete(&model)
+	c.IndentedJSON(http.StatusOK, model.toDto())
+}
+
+func listResources(db *gorm.DB, g *gin.RouterGroup) {
+	r := ListResource{db: db}
+
+	g.POST("/", r.createList)
+	g.GET("/", r.fetchAllList)
+	g.GET("/:id", r.fetchSingleList)
+	g.PUT("/:id", r.updateList)
+	g.DELETE("/:id", r.deleteList)
+}
