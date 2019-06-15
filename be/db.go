@@ -14,10 +14,14 @@ type (
 		gorm.Model
 		Title   string
 		Content string
+
+		ListID uint
 	}
 	listModel struct {
 		gorm.Model
 		Name string
+
+		Todos []todoModel `gorm:"foreignkey:ListID"`
 	}
 )
 

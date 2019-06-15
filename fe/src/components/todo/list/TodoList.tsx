@@ -34,11 +34,7 @@ export class TodoList extends Component {
     }
   }
   createEntry(e){
-    axios
-      .post("/api/v1/todos", {
-        "Title": e.title,
-        "Content": e.content
-      })
+    this.props.entryCreator(e)
       .then(response => { this.reloadTodos(); })
       .catch(error => console.log(error));
   }
@@ -52,20 +48,10 @@ export class TodoList extends Component {
     this.reloadTodos()
   }
   reloadTodos() {
-    axios
-      .get("/api/v1/todos/")
-      .then(response => {
-        const newTodos = response.data.map(c => {
-          return {
-            id: c.ID,
-            title: c.Title,
-            content: c.Content
-          };
-        });
-
-        this.setState({entries: newTodos});
-      })
-      .catch(error => console.log(error));
+    this.props.entriesLoader()
+      .then(entries => {
+        this.setState({entries: entries});
+      });
   }
   render() {
     return (

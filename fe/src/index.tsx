@@ -40,13 +40,54 @@ class App extends Component {
       })
       .catch(error => console.log(error));
   }
+  loadTodosForList(listId) {
+    var base;
+
+    if(listId != null) {
+      base = axios.get("/api/v1/lists/"+listId+"/todos/");
+    } else {
+      base = axios.get("/api/v1/todos/");
+    }
+
+    return base
+      .then(response => {
+        const newTodos = response.data.map(c => {
+          return {
+            id: c.ID,
+            title: c.Title,
+            content: c.Content
+          };
+        });
+
+        return newTodos;
+      })
+      .catch(error => console.log(error));
+  }
+  createEntry(listId, e){
+    console.log("%o %o", listId, e);
+    return axios
+      .post("/api/v1/todos", {
+        "Title": e.title,
+        "Content": e.content,
+        "ListID": listId
+      })
+      .catch(error => console.log(error));
+  }
   render() {
     return (
       <div>
         <div className="siteHeader"><h1>todo list: docker go react</h1></div>
+        <TodoList
+          listName = "General todos"
+          entriesLoader = {() => this.loadTodosForList(null)}
+          entryCreator = {(e) => this.createEntry(null, e)}
+          onRemove = {() => this.removeEntry(entry.id)}
+        />
         {this.state.entries.map((list, i) => <div key = {list.id}>
           <TodoList
             listName = {list.name}
+            entriesLoader = {() => this.loadTodosForList(list.id)}
+            entryCreator = {(e) => this.createEntry(list.id, e)}
             onRemove = {() => this.removeEntry(entry.id)}
           />
         </div>)}

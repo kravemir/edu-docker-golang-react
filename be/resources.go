@@ -17,10 +17,16 @@ type (
 )
 
 func (m *todoModel) toDto() todoDto {
+	var listId *uint = nil
+	if m.ListID != 0 {
+		listId = &m.ListID
+	}
+
 	return todoDto{
 		ID:      m.ID,
 		Title:   m.Title,
 		Content: m.Content,
+		ListID:  listId,
 	}
 }
 
@@ -61,6 +67,12 @@ func (r *TodoResource) createTodo(c *gin.Context) {
 	model := todoModel{
 		Content: dto.Content,
 		Title:   dto.Title,
+	}
+
+	if dto.ListID != nil {
+		model.ListID = *dto.ListID
+	} else {
+		model.ListID = 0
 	}
 
 	r.db.Save(&model)
@@ -153,6 +165,27 @@ func (r *ListResource) fetchSingleList(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, model.toDto())
 }
 
+func (r *ListResource) fetchListTodos(c *gin.Context) {
+	var model listModel
+	id := c.Param("id")
+	r.db.Preload("Todos").First(&model, id)
+
+	if model.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"status":  http.StatusNotFound,
+			"message": fmt.Sprintf("List with ID=%s not found!", id),
+		})
+		return
+	}
+
+	todosDto := make([]todoDto, len(model.Todos))
+	for i, m := range model.Todos {
+		todosDto[i] = m.toDto()
+	}
+
+	c.IndentedJSON(200, todosDto)
+}
+
 func (r *ListResource) createList(c *gin.Context) {
 	dto := listDto{}
 	if err := c.BindJSON(&dto); err != nil {
@@ -207,6 +240,7 @@ func listResources(db *gorm.DB, g *gin.RouterGroup) {
 	g.POST("/", r.createList)
 	g.GET("/", r.fetchAllList)
 	g.GET("/:id", r.fetchSingleList)
+	g.GET("/:id/todos", r.fetchListTodos)
 	g.PUT("/:id", r.updateList)
 	g.DELETE("/:id", r.deleteList)
 }
