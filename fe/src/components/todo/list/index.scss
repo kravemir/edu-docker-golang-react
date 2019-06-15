@@ -7,6 +7,10 @@
   margin: 25px;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.2);
+
+  > .card-header {
+    padding-top: 15px;
+  }
 }
 
 .todo-list-card-entries {

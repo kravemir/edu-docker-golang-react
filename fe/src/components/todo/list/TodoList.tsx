@@ -70,8 +70,8 @@ export class TodoList extends Component {
   render() {
     return (
       <div className="todo-list-card">
-        <div class="card-header">
-          Yours todo list
+        <div className="card-header">
+          {this.props.listName}
         </div>
         <ul className="todo-list-card-entries">
         {this.state.entries.map((entry, i) => <li key = {entry.id} className="list-group-item">
