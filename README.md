@@ -8,7 +8,7 @@ Just run docker compose:
 docker-compose up --build
 ```
 
-Access the web: http://localhost:8080/ping
+Access the web: http://localhost:8080/
 
 ## Used technologies
 
