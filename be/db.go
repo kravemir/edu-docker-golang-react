@@ -9,20 +9,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type (
-	todoModel struct {
-		gorm.Model
-		Title   string
-		Content string
-
-		ListID uint
-	}
-	listModel struct {
-		gorm.Model
-		Name string
-
-		Todos []todoModel `gorm:"foreignkey:ListID"`
-	}
+import (
+	. "todo-be/model"
 )
 
 func openAndInitDb() *gorm.DB {
@@ -31,8 +19,8 @@ func openAndInitDb() *gorm.DB {
 		panic(fmt.Sprintf("Failed to connect the database: %v", err))
 	}
 
-	db.AutoMigrate(&todoModel{})
-	db.AutoMigrate(&listModel{})
+	db.AutoMigrate(&TodoModel{})
+	db.AutoMigrate(&ListModel{})
 
 	return db
 }

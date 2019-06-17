@@ -1,13 +1,13 @@
-package main
+package dto
 
-type todoDto struct {
+type TodoDto struct {
 	ID      uint
 	Title   string
 	Content string
 	ListID  *uint
 }
 
-type listDto struct {
+type ListDto struct {
 	ID   uint
 	Name string
 }
