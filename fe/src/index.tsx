@@ -43,11 +43,7 @@ class App extends Component {
   loadTodosForList(listId) {
     var base;
 
-    if(listId != null) {
-      base = axios.get("/api/v1/lists/"+listId+"/todos/");
-    } else {
-      base = axios.get("/api/v1/todos/");
-    }
+    base = axios.get("/api/v1/lists/"+listId+"/todos/");
 
     return base
       .then(response => {
@@ -77,12 +73,6 @@ class App extends Component {
     return (
       <div>
         <div className="siteHeader"><h1>todo list: docker go react</h1></div>
-        <TodoList
-          listName = "General todos"
-          entriesLoader = {() => this.loadTodosForList(null)}
-          entryCreator = {(e) => this.createEntry(null, e)}
-          onRemove = {() => this.removeEntry(entry.id)}
-        />
         {this.state.entries.map((list, i) => <div key = {list.id}>
           <TodoList
             listName = {list.name}
