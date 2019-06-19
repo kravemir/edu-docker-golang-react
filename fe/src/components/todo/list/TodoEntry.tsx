@@ -14,7 +14,7 @@ export class TodoEntry extends Component {
       <div className="todo-list-entry">
         <div className="content">{this.props.entry.content}</div>
         <div className="buttons">
-          <button className="btn btn-link text-danger" onClick = {() => this.handleRemove()}>Remove</button>
+          <button className="btn btn-link btn-icon text-danger" onClick = {() => this.handleRemove()}><i class="material-icons">remove</i><span>remove</span></button>
         </div>
       </div>
     )
