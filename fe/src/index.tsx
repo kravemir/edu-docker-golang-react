@@ -18,7 +18,7 @@ class App extends Component {
     this.reloadLists()
   }
   createList(l){
-    axios
+    return axios
       .post("/api/v1/lists", {
         "Name": l.name
       })

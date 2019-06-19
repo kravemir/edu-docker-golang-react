@@ -1,16 +1,37 @@
 import * as React from "react"
 import { Component } from "react"
 import { render } from "react-dom"
-import axios from "axios";
+
+function checkAllFieldsValid(formElements) {
+  return !Array.prototype.slice.call(formElements)
+    .filter(elem => elem.name.length > 0)
+    .some(field => !field.checkValidity());
+}
 
 export class TodoForm extends Component {
-  handleCreate(event) {
+  constructor() {
+    super();
+    this.state = {
+      "formState": "clean",
+      "content": ""
+    }
+  }
+  onSubmit(event) {
     event.preventDefault();
 
-    if(this.props.onCreate) {
+    this.setState({ "formState": "submitted" });
+
+    const allFieldsValid = checkAllFieldsValid(event.target.elements);
+
+    if (allFieldsValid && this.props.onCreate) {
       this.props.onCreate({
         "title": this.state.title,
         "content": this.state.content
+      }).then(result => {
+        this.setState({
+          "formState": "clean",
+          "content": ""
+        });
       })
     }
   }
@@ -25,16 +46,21 @@ export class TodoForm extends Component {
   }
   render() {
     return (
-      <form className="form">
+      <form className={"form" + (this.state.formState != "clean" ? " was-validated" : "")} onSubmit={(e) => this.onSubmit(e)} noValidate>
         <div className="form-group">
           <textarea className="form-control form-control-sm"
-                    name="content"
-                    rows="3"
-                    placeholder="Content ..."
-                    onChange={(e) => this.handleInputChange(e)}
-                    />
+            name="content"
+            rows={3}
+            placeholder="Content ..."
+            required={true}
+            value={this.state.content}
+            onChange={(e) => this.handleInputChange(e)}
+          />
+          <div className="invalid-feedback">
+            Please enter entry content.
+          </div>
         </div>
-        <button className="btn btn-success" onClick = {(e) => this.handleCreate(e)}>Add</button>
+        <button className="btn btn-success">Add</button>
       </form>
     )
   }

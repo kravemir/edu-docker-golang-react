@@ -34,7 +34,7 @@ export class TodoList extends Component {
     }
   }
   createEntry(e){
-    this.props.entryCreator(e)
+    return this.props.entryCreator(e)
       .then(response => { this.reloadTodos(); })
       .catch(error => console.log(error));
   }

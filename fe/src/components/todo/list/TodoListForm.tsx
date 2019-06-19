@@ -3,13 +3,36 @@ import { Component } from "react"
 import { render } from "react-dom"
 import axios from "axios";
 
+function checkAllFieldsValid(formElements) {
+  return !Array.prototype.slice.call(formElements)
+    .filter(elem => elem.name.length > 0)
+    .some(field => !field.checkValidity());
+}
+
 export class TodoListForm extends Component {
-  handleCreate(event) {
+  constructor() {
+    super();
+
+    this.state = {
+      "formState": "clean",
+      "name": ""
+    }
+  }
+  onSubmit(event) {
     event.preventDefault();
 
-    if(this.props.onCreate) {
+    this.setState({ "formState": "submitted" });
+
+    const allFieldsValid = checkAllFieldsValid(event.target.elements);
+
+    if (allFieldsValid && this.props.onCreate) {
       this.props.onCreate({
         "name": this.state.name
+      }).then(result => {
+        this.setState({
+          "formState": "clean",
+          "name": ""
+        });
       })
     }
   }
@@ -29,11 +52,14 @@ export class TodoListForm extends Component {
           Create new todo list
         </div>
         <div className="card-body">
-          <form className="form">
+          <form className={"form" + (this.state.formState != "clean" ? " was-validated" : "")} onSubmit={(e) => this.onSubmit(e)} noValidate>
             <div className="form-group">
-              <input type="text" className="form-control" name="name" placeholder="New todo-list name ..." onChange={(e) => this.handleInputChange(e)} />
+              <input type="text" value={this.state.name} className="form-control" name="name" placeholder="New todo-list name ..." onChange={(e) => this.handleInputChange(e)} required />
+              <div className="invalid-feedback">
+                Please enter list name.
+              </div>
             </div>
-            <button className="btn btn-primary" onClick = {(e) => this.handleCreate(e)}>Create</button>
+            <button className="btn btn-primary">Create</button>
           </form>
         </div>
       </div>
