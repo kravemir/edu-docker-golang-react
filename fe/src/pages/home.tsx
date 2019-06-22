@@ -1,7 +1,9 @@
 import * as React from "react"
 import { Component } from "react"
 import { render } from "react-dom"
-import axios from "axios";
+
+import ListService from "../api-services/list.service";
+import TodoService from "../api-services/todo.service";
 
 import { TodoList, TodoListForm } from "../components/todo/list";
 
@@ -16,16 +18,14 @@ class HomePage extends Component {
     this.reloadLists()
   }
   createList(l){
-    return axios
-      .post("/api/v1/lists", {
+    return ListService.create({
         "Name": l.name
       })
       .then(response => { this.reloadLists(); })
       .catch(error => console.log(error));
   }
   reloadLists() {
-    axios
-      .get("/api/v1/lists/")
+    ListService.getAll()
       .then(response => {
         const newLists = response.data.map(c => {
           return {
@@ -41,7 +41,7 @@ class HomePage extends Component {
   loadTodosForList(listId) {
     var base;
 
-    base = axios.get("/api/v1/lists/"+listId+"/todos/");
+    base = ListService.todos(listId);
 
     return base
       .then(response => {
@@ -59,8 +59,7 @@ class HomePage extends Component {
   }
   createEntry(listId, e){
     console.log("%o %o", listId, e);
-    return axios
-      .post("/api/v1/todos", {
+    return TodoService.create({
         "Title": e.title,
         "Content": e.content,
         "ListID": listId

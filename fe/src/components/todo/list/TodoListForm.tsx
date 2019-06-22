@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Component } from "react"
 import { render } from "react-dom"
-import axios from "axios";
 
 function checkAllFieldsValid(formElements) {
   return !Array.prototype.slice.call(formElements)

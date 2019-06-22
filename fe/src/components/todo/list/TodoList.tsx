@@ -1,7 +1,8 @@
 import * as React from "react"
 import { Component } from "react"
 import { render } from "react-dom"
-import axios from "axios";
+
+import TodoService from "../../../api-services/todo.service";
 
 import { TodoForm } from "./TodoForm";
 import { TodoEntry } from "./TodoEntry";
@@ -39,8 +40,7 @@ export class TodoList extends Component {
       .catch(error => console.log(error));
   }
   removeEntry(id) {
-    axios
-      .delete("/api/v1/todos/" + id)
+    TodoService.delete(id)
       .then(response => { this.reloadTodos(); })
       .catch(error => console.log(error));
   }
