@@ -1,90 +1,28 @@
 import * as React from "react"
-import { Component } from "react"
+import { BrowserRouter, Link, Route } from "react-router-dom";
 import { render } from "react-dom"
-import axios from "axios";
 
-import { TodoList, TodoListForm } from "./components/todo/list";
+import HomePage from "./pages/home";
+import SettingsPage from "./pages/settings";
 
 import "./index.scss"
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      entries: []
-    }
-  }
-  componentDidMount() {
-    this.reloadLists()
-  }
-  createList(l){
-    return axios
-      .post("/api/v1/lists", {
-        "Name": l.name
-      })
-      .then(response => { this.reloadLists(); })
-      .catch(error => console.log(error));
-  }
-  reloadLists() {
-    axios
-      .get("/api/v1/lists/")
-      .then(response => {
-        const newLists = response.data.map(c => {
-          return {
-            id: c.ID,
-            name: c.Name
-          };
-        });
-
-        this.setState({entries: newLists});
-      })
-      .catch(error => console.log(error));
-  }
-  loadTodosForList(listId) {
-    var base;
-
-    base = axios.get("/api/v1/lists/"+listId+"/todos/");
-
-    return base
-      .then(response => {
-        const newTodos = response.data.map(c => {
-          return {
-            id: c.ID,
-            title: c.Title,
-            content: c.Content
-          };
-        });
-
-        return newTodos;
-      })
-      .catch(error => console.log(error));
-  }
-  createEntry(listId, e){
-    console.log("%o %o", listId, e);
-    return axios
-      .post("/api/v1/todos", {
-        "Title": e.title,
-        "Content": e.content,
-        "ListID": listId
-      })
-      .catch(error => console.log(error));
-  }
-  render() {
-    return (
+function App() {
+  return (
+    <BrowserRouter>
       <div>
-        <div className="siteHeader"><h1>todo list: docker go react</h1></div>
-        {this.state.entries.map((list, i) => <div key = {list.id}>
-          <TodoList
-            listName = {list.name}
-            entriesLoader = {() => this.loadTodosForList(list.id)}
-            entryCreator = {(e) => this.createEntry(list.id, e)}
-            onRemove = {() => this.removeEntry(entry.id)}
-          />
-        </div>)}
-        <TodoListForm onCreate={(l) => this.createList(l)}/>
+        <div className="siteHeader">
+          <ul className="navigation">
+            <li><Link to="/">Home</Link></li>
+            <li className="spacer"></li>
+            <li><Link to="/settings">Settings</Link></li>
+          </ul>
+        </div>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/settings" component={SettingsPage} />
       </div>
-    )
-  }
-}
+    </BrowserRouter>
+  );
+};
 
 render(<App />, document.getElementById("root"))

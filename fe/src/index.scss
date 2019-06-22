@@ -16,14 +16,28 @@ div.siteHeader {
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(126, 122, 89, 0.3);
 
-    text-align: right;
     padding: 0 25px;
 
-    h1 {
+    ul.navigation {
+      display: block;
+      display: flex;
       margin: 0;
-      padding: 14px 0 10px;
-      font-weight: 400;
-      font-family: 'IM Fell DW Pica', serif;
+      padding: 0;
+      min-height: 48px;
+      align-items: flex-end;
+      flex-direction: row;
+
+      > li {
+        display: inline-block;
+
+        + li {
+          margin-left: 4px;
+        }
+      }
+
+      a {
+        color: #30241a;
+      }
     }
 }
 
