@@ -1,12 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
+import { connect } from "react-redux";
 
 import { ButtonGroup, Col, Form, Row, ToggleButton } from "react-bootstrap";
 
-function SettingsPage() {
-  const [density, setDensity] = useState("comfortable");
-  const [theme, setTheme] = useState("gray-yellow");
-
+function SettingsPage({ density, theme, setDensity, setTheme }) {
   const QuickToggle = ({ currentValue, setValue, value, name }) => (
     <ToggleButton
       type="radio"
@@ -58,4 +56,17 @@ function SettingsPage() {
   );
 }
 
-export default SettingsPage;
+const mapState = state => ({
+  density: state.settings.density,
+  theme: state.settings.theme
+});
+
+const mapDispatch = ({ settings }) => ({
+  setDensity: val => settings.setDensity(val),
+  setTheme: val => settings.setTheme(val)
+});
+
+export default connect(
+  mapState,
+  mapDispatch
+)(SettingsPage);
