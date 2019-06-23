@@ -4,10 +4,19 @@ $theme-colors: (
   "danger-hover": #a01000,
 );
 
-@import "node_modules/bootstrap/scss/bootstrap";
+// Boostrap: Required
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+
+.scoped-bootstrap {
+  @import "node_modules/bootstrap/scss/bootstrap";
+}
 
 body, html {
   background: #fcfaf1;
+  margin: 0;
+  padding: 0;
 }
 
 div.siteHeader {
