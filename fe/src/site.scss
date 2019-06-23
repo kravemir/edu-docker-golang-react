@@ -1,0 +1,24 @@
+
+
+html, body {
+  background-color: mix(theme-color("primary"), #fcfaf1, 2%);
+}
+
+.navbar-site {
+  background: #fcf4b2;
+  background-color: theme-color-level("primary", -11);
+
+  color: #30241a;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(126, 122, 89, 0.3);
+
+  padding: 0 25px;
+
+  .nav-link {
+    color: theme-color-level("primary", 4);
+
+    &.active {
+      color: theme-color-level("primary", 7);
+    }
+  }
+}

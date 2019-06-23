@@ -10,60 +10,30 @@ $theme-colors: (
 @import "node_modules/bootstrap/scss/mixins";
 
 .bootstrap-scope.gray-blue {
+  $body-bg: #fcfaf1;
+
   @import "node_modules/bootstrap/scss/bootstrap";
+  @import "site.scss";
 }
 
 .bootstrap-scope.gray-yellow {
+  $body-bg: #fcfaf1;
   $theme-colors: (
     "primary": #cccc22
   );
 
   @import "node_modules/bootstrap/scss/bootstrap";
+  @import "site.scss";
 }
 
 .bootstrap-scope.purple {
+  $body-bg: #fcfaf1;
   $theme-colors: (
     "primary": #cc22cc
   );
 
   @import "node_modules/bootstrap/scss/bootstrap";
-}
-
-body, html {
-  background: #fcfaf1;
-  margin: 0;
-  padding: 0;
-}
-
-div.siteHeader {
-    background: #fcf4b2;
-    color: #30241a;
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(126, 122, 89, 0.3);
-
-    padding: 0 25px;
-
-    ul.navigation {
-      display: block;
-      display: flex;
-      margin: 0;
-      padding: 0;
-      min-height: 48px;
-      align-items: flex-end;
-      flex-direction: row;
-
-      > li {
-        display: inline-block;
-
-        + li {
-          margin-left: 4px;
-        }
-      }
-
-      a {
-        color: #30241a;
-      }
-    }
+  @import "site.scss";
 }
 
 .btn {
