@@ -10,6 +10,14 @@ import SettingsPage from "./pages/settings";
 
 import "./index.scss";
 
+function updateHtmlStyle() {
+  const { density, theme } = store.getState().settings;
+  document.documentElement.className = `bootstrap-scope ${theme}`;
+}
+
+store.subscribe(updateHtmlStyle);
+updateHtmlStyle();
+
 function App() {
   return (
     <Provider store={store}>

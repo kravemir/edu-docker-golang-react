@@ -9,7 +9,23 @@ $theme-colors: (
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
 
-.scoped-bootstrap {
+.bootstrap-scope.gray-blue {
+  @import "node_modules/bootstrap/scss/bootstrap";
+}
+
+.bootstrap-scope.gray-yellow {
+  $theme-colors: (
+    "primary": #cccc22
+  );
+
+  @import "node_modules/bootstrap/scss/bootstrap";
+}
+
+.bootstrap-scope.purple {
+  $theme-colors: (
+    "primary": #cc22cc
+  );
+
   @import "node_modules/bootstrap/scss/bootstrap";
 }
 
