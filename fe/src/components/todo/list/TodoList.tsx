@@ -1,6 +1,7 @@
-import * as React from "react"
-import { Component } from "react"
-import { render } from "react-dom"
+import * as React from "react";
+import { Component } from "react";
+import { render } from "react-dom";
+import { Card, ListGroup } from "react-bootstrap";
 
 import TodoService from "../../../api-services/todo.service";
 
@@ -9,8 +10,8 @@ import { TodoEntry } from "./TodoEntry";
 
 function chunkArrayInGroups(arr, size) {
   var myArray = [];
-  for(var i = 0; i < arr.length; i += size) {
-    myArray.push(arr.slice(i, i+size));
+  for (var i = 0; i < arr.length; i += size) {
+    myArray.push(arr.slice(i, i + size));
   }
   return myArray;
 }
@@ -19,58 +20,61 @@ export class TodoList extends Component {
   constructor() {
     super();
     this.state = {
-      entries:
-      [
+      entries: [
         {
-          "id": 1,
-          "title": "Implement",
-          "content": "Implment it all"
+          id: 1,
+          title: "Implement",
+          content: "Implment it all"
         },
         {
-          "id": 2,
-          "title": "Check",
-          "content": "Check it all"
+          id: 2,
+          title: "Check",
+          content: "Check it all"
         }
       ]
-    }
+    };
   }
-  createEntry(e){
-    return this.props.entryCreator(e)
-      .then(response => { this.reloadTodos(); })
+  createEntry(e) {
+    return this.props
+      .entryCreator(e)
+      .then(response => {
+        this.reloadTodos();
+      })
       .catch(error => console.log(error));
   }
   removeEntry(id) {
     TodoService.delete(id)
-      .then(response => { this.reloadTodos(); })
+      .then(response => {
+        this.reloadTodos();
+      })
       .catch(error => console.log(error));
   }
   componentDidMount() {
-    this.reloadTodos()
+    this.reloadTodos();
   }
   reloadTodos() {
-    this.props.entriesLoader()
-      .then(entries => {
-        this.setState({entries: entries});
-      });
+    this.props.entriesLoader().then(entries => {
+      this.setState({ entries: entries });
+    });
   }
   render() {
     return (
-      <div className="todo-list-card">
-        <div className="card-header">
-          {this.props.listName}
-        </div>
-        <ul className="todo-list-card-entries">
-        {this.state.entries.map((entry, i) => <li key = {entry.id} className="list-group-item">
-          <TodoEntry
-            entry = {entry}
-            onRemove = {() => this.removeEntry(entry.id)}
-          />
-        </li>)}
-        </ul>
-        <div className="card-footer">
-          <TodoForm onCreate={(e) => this.createEntry(e)}/>
-        </div>
-      </div>
-    )
+      <Card className="todo-list-card">
+        <Card.Header>{this.props.listName}</Card.Header>
+        <ListGroup className="todo-list-card-entries" variant="flush">
+          {this.state.entries.map((entry, i) => (
+            <ListGroup.Item key={entry.id}>
+              <TodoEntry
+                entry={entry}
+                onRemove={() => this.removeEntry(entry.id)}
+              />
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+        <Card.Footer>
+          <TodoForm onCreate={e => this.createEntry(e)} />
+        </Card.Footer>
+      </Card>
+    );
   }
 }

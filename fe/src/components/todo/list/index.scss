@@ -1,12 +1,5 @@
 
-// Boostrap: Required
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
-
 .todo-list-card {
-  // @extend .card;
-
   margin: 25px;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -14,11 +7,6 @@
   > .card-header {
     padding-top: 15px;
   }
-}
-
-.todo-list-card-entries {
-  // @extend .list-group;
-  // @extend .list-group-flush;
 }
 
 .todo-list-entry {
