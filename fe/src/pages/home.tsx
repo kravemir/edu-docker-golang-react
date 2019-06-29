@@ -26,6 +26,13 @@ class HomePage extends Component {
       })
       .catch(error => console.log(error));
   }
+  removeList(l) {
+    ListService.delete(l.id)
+      .then(response => {
+        this.reloadLists();
+      })
+      .catch(error => console.log(error));
+  }
   reloadLists() {
     ListService.getAll()
       .then(response => {
@@ -76,7 +83,7 @@ class HomePage extends Component {
               listName={list.name}
               entriesLoader={() => this.loadTodosForList(list.id)}
               entryCreator={e => this.createEntry(list.id, e)}
-              onRemove={() => this.removeEntry(entry.id)}
+              onRemove={() => this.removeList(list)}
             />
           </div>
         ))}

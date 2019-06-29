@@ -57,20 +57,52 @@ export class TodoList extends Component {
       this.setState({ entries: entries });
     });
   }
+  handleRemove() {
+    if (this.props.onRemove) {
+      this.props.onRemove();
+    }
+  }
   render() {
+    const cardBody = () => {
+      if (this.state.entries && this.state.entries.length > 0) {
+        return (
+          <ListGroup className="todo-list-card-entries" variant="flush">
+            {this.state.entries.map((entry, i) => (
+              <ListGroup.Item key={entry.id}>
+                <TodoEntry
+                  entry={entry}
+                  onRemove={() => this.removeEntry(entry.id)}
+                />
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        );
+      } else {
+        return (
+          <div className="text-muted">
+            The list is empty, use form below to add entries ...
+          </div>
+        );
+      }
+    };
+
     return (
       <Card className="todo-list-card">
-        <Card.Header>{this.props.listName}</Card.Header>
-        <ListGroup className="todo-list-card-entries" variant="flush">
-          {this.state.entries.map((entry, i) => (
-            <ListGroup.Item key={entry.id}>
-              <TodoEntry
-                entry={entry}
-                onRemove={() => this.removeEntry(entry.id)}
-              />
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
+        <Card.Header>
+          <div className="d-flex align-items-center">
+            <div className="mr-auto">{this.props.listName}</div>
+            <div>
+              <button
+                className="btn btn-link btn-icon text-danger"
+                onClick={() => this.handleRemove()}
+              >
+                <i className="material-icons">remove</i>
+                <span>remove</span>
+              </button>
+            </div>
+          </div>
+        </Card.Header>
+        <Card.Body>{cardBody()}</Card.Body>
         <Card.Footer>
           <TodoForm onCreate={e => this.createEntry(e)} />
         </Card.Footer>
