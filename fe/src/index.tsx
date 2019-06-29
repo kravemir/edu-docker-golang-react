@@ -26,11 +26,9 @@ function App() {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <BrowserRouter>
-          <div>
-            <Navigation />
-            <Route exact path="/" component={HomePage} />
-            <Route path="/settings" component={SettingsPage} />
-          </div>
+          <Navigation />
+          <Route exact path="/" component={HomePage} />
+          <Route path="/settings" component={SettingsPage} />
         </BrowserRouter>
       </PersistGate>
     </Provider>

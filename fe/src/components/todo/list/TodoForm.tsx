@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Component } from "react";
-import { render } from "react-dom";
 
-function checkAllFieldsValid(formElements) {
-  return !Array.prototype.slice
+function getInvalidFields(formElements) {
+  return Array.prototype.slice
     .call(formElements)
     .filter(elem => elem.name.length > 0)
-    .some(field => !field.checkValidity());
+    .filter(elem => !elem.checkValidity())
+    .map(elem => elem.name);
 }
 
 export class TodoForm extends Component {
@@ -14,7 +14,8 @@ export class TodoForm extends Component {
     super();
     this.state = {
       formState: "clean",
-      content: ""
+      content: "",
+      invalidFields: []
     };
   }
   onSubmit(event) {
@@ -22,9 +23,11 @@ export class TodoForm extends Component {
 
     this.setState({ formState: "submitted" });
 
-    const allFieldsValid = checkAllFieldsValid(event.target.elements);
+    const invalidFields = getInvalidFields(event.target.elements);
 
-    if (allFieldsValid && this.props.onCreate) {
+    this.setState({ invalidFields: invalidFields });
+
+    if (invalidFields.length === 0 && this.props.onCreate) {
       this.props
         .onCreate({
           title: this.state.title,
@@ -33,7 +36,8 @@ export class TodoForm extends Component {
         .then(result => {
           this.setState({
             formState: "clean",
-            content: ""
+            content: "",
+            invalidFields: []
           });
         });
     }
@@ -58,7 +62,11 @@ export class TodoForm extends Component {
       >
         <div className="form-group">
           <textarea
-            className="form-control form-control-sm"
+            className={`form-control form-control-sm ${
+              this.state.invalidFields.some(e => e === "content")
+                ? "is-invalid"
+                : ""
+            }`}
             name="content"
             rows={3}
             placeholder="Content ..."

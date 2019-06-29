@@ -1,6 +1,6 @@
-import * as React from "react"
-import { Component } from "react"
-import { render } from "react-dom"
+import * as React from "react";
+import { Component } from "react";
+import { render } from "react-dom";
 
 import ListService from "../api-services/list.service";
 import TodoService from "../api-services/todo.service";
@@ -12,16 +12,18 @@ class HomePage extends Component {
     super();
     this.state = {
       entries: []
-    }
+    };
   }
   componentDidMount() {
-    this.reloadLists()
+    this.reloadLists();
   }
-  createList(l){
+  createList(l) {
     return ListService.create({
-        "Name": l.name
+      Name: l.name
+    })
+      .then(response => {
+        this.reloadLists();
       })
-      .then(response => { this.reloadLists(); })
       .catch(error => console.log(error));
   }
   reloadLists() {
@@ -34,7 +36,7 @@ class HomePage extends Component {
           };
         });
 
-        this.setState({entries: newLists});
+        this.setState({ entries: newLists });
       })
       .catch(error => console.log(error));
   }
@@ -57,29 +59,30 @@ class HomePage extends Component {
       })
       .catch(error => console.log(error));
   }
-  createEntry(listId, e){
+  createEntry(listId, e) {
     console.log("%o %o", listId, e);
     return TodoService.create({
-        "Title": e.title,
-        "Content": e.content,
-        "ListID": listId
-      })
-      .catch(error => console.log(error));
+      Title: e.title,
+      Content: e.content,
+      ListID: listId
+    }).catch(error => console.log(error));
   }
   render() {
     return (
-      <div className="page-content">
-        {this.state.entries.map((list, i) => <div key = {list.id}>
-          <TodoList
-            listName = {list.name}
-            entriesLoader = {() => this.loadTodosForList(list.id)}
-            entryCreator = {(e) => this.createEntry(list.id, e)}
-            onRemove = {() => this.removeEntry(entry.id)}
-          />
-        </div>)}
-        <TodoListForm onCreate={(l) => this.createList(l)}/>
+      <div className="page-content container">
+        {this.state.entries.map((list, i) => (
+          <div key={list.id}>
+            <TodoList
+              listName={list.name}
+              entriesLoader={() => this.loadTodosForList(list.id)}
+              entryCreator={e => this.createEntry(list.id, e)}
+              onRemove={() => this.removeEntry(entry.id)}
+            />
+          </div>
+        ))}
+        <TodoListForm onCreate={l => this.createList(l)} />
       </div>
-    )
+    );
   }
 }
 

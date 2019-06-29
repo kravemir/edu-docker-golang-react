@@ -16,16 +16,18 @@ function Navigation(props) {
   );
   return (
     <Navbar variant="site">
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <NavLink path="/" exact={true}>
-            Home
-          </NavLink>
-          <NavLink path="/settings" exact={false}>
-            Settings
-          </NavLink>
-        </Nav>
-      </Navbar.Collapse>
+      <div className="container">
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <NavLink path="/" exact={true}>
+              Home
+            </NavLink>
+            <NavLink path="/settings" exact={false}>
+              Settings
+            </NavLink>
+          </Nav>
+        </Navbar.Collapse>
+      </div>
     </Navbar>
   );
 }

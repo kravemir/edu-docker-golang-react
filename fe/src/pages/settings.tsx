@@ -25,14 +25,14 @@ function SettingsPage({ density, theme, setDensity, setTheme }) {
   );
 
   return (
-    <div className="page-content">
-      <Form>
+    <div className="page-content container">
+      <Form className="mt-4">
         <Form.Group as={Row}>
           <Form.Label column sm={2}>
-            Email
+            Density
           </Form.Label>
           <Col sm={10}>
-            <ButtonGroup toggle className="mt-3">
+            <ButtonGroup toggle>
               <DensityToggle value="compact" name="Compact" />
               <DensityToggle value="cozy" name="Cozy" />
               <DensityToggle value="comfortable" name="Comfortable" />
