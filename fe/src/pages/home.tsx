@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Component } from "react";
-import { render } from "react-dom";
 
 import ListService from "../api-services/list.service";
 import TodoService from "../api-services/todo.service";
@@ -18,9 +17,7 @@ class HomePage extends Component {
     this.reloadLists();
   }
   createList(l) {
-    return ListService.create({
-      Name: l.name
-    })
+    return ListService.create(l)
       .then(response => {
         this.reloadLists();
       })
@@ -35,44 +32,18 @@ class HomePage extends Component {
   }
   reloadLists() {
     ListService.getAll()
-      .then(response => {
-        const newLists = response.data.map(c => {
-          return {
-            id: c.ID,
-            name: c.Name
-          };
-        });
-
+      .then(newLists => {
         this.setState({ entries: newLists });
       })
       .catch(error => console.log(error));
   }
   loadTodosForList(listId) {
-    var base;
-
-    base = ListService.todos(listId);
-
-    return base
-      .then(response => {
-        const newTodos = response.data.map(c => {
-          return {
-            id: c.ID,
-            title: c.Title,
-            content: c.Content
-          };
-        });
-
-        return newTodos;
-      })
-      .catch(error => console.log(error));
+    return ListService.todos(listId).catch(error => console.log(error));
   }
   createEntry(listId, e) {
-    console.log("%o %o", listId, e);
-    return TodoService.create({
-      Title: e.title,
-      Content: e.content,
-      ListID: listId
-    }).catch(error => console.log(error));
+    return TodoService.create({ listId, content: e.content }).catch(error =>
+      console.log(error)
+    );
   }
   render() {
     return (
