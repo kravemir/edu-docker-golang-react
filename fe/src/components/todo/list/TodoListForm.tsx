@@ -1,5 +1,6 @@
 import * as React from "react";
 import { withFormik } from "formik";
+import * as Yup from "yup";
 
 const isValid = errorList => !errorList || errorList.length === 0;
 const isNotEmpty = val => val && val.trim().length > 0;
@@ -37,17 +38,13 @@ const BaseForm = ({
   </div>
 );
 
+const NewListSchema = Yup.object().shape({
+  name: Yup.string().required("Name should not be empty.")
+});
+
 const FormikForm = withFormik({
   mapPropsToValues: () => ({ name: "" }),
-  validate: values => {
-    const errors = {};
-
-    if (!isNotEmpty(values.name)) {
-      errors.name = "Name should not be empty.";
-    }
-
-    return errors;
-  },
+  validationSchema: NewListSchema,
   handleSubmit: (values, { props, setSubmitting, resetForm }) => {
     setSubmitting(true);
     props
