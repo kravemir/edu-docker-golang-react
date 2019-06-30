@@ -1,49 +1,32 @@
 import * as React from "react";
-import { useState } from "react";
-import Revalidation from "revalidation";
+import { withFormik } from "formik";
 
-const getValue = e => e.target.value;
-
-const isValid = errorList => errorList === null || errorList.length === 0;
-const isNotEmpty = val => val.trim().length > 0;
+const isValid = errorList => !errorList || errorList.length === 0;
+const isNotEmpty = val => val && val.trim().length > 0;
 
 const BaseForm = ({
-  revalidation: {
-    form,
-    onChange,
-    updateState,
-    valid,
-    submitted,
-    errors,
-    onSubmit
-  },
-  onSubmit: submitCb
+  values,
+  submitCount,
+  errors,
+  handleChange,
+  handleBlur,
+  handleSubmit
 }) => (
   <div className="todo-list-card card">
     <div className="card-header">Create new todo list</div>
     <div className="card-body">
-      <form
-        className="form"
-        onSubmit={e => {
-          e.preventDefault();
-          onSubmit(({ form, valid }) =>
-            valid
-              ? submitCb(form)
-              : console.log("something went wrong!", errors)
-          );
-        }}
-        noValidate
-      >
+      <form className="form" onSubmit={handleSubmit} noValidate>
         <div className="form-group">
           <input
             type="text"
-            value={form.name}
+            value={values.name}
             className={`form-control ${
-              isValid(errors.name) || !submitted ? "" : "is-invalid"
+              isValid(errors.name) || !submitCount ? "" : "is-invalid"
             }`}
             name="name"
             placeholder="New todo-list name ..."
-            onChange={e => onChange("name", getValue(e))}
+            onChange={handleChange}
+            onBlur={handleBlur}
             required
           />
           <div className="invalid-feedback">{errors.name}</div>
@@ -54,34 +37,30 @@ const BaseForm = ({
   </div>
 );
 
-const validationRules = {
-  name: [[isNotEmpty, "Name should not be  empty."]]
-};
+const FormikForm = withFormik({
+  mapPropsToValues: () => ({ name: "" }),
+  validate: values => {
+    const errors = {};
 
-const RevalidationForm = Revalidation(BaseForm);
+    if (!isNotEmpty(values.name)) {
+      errors.name = "Name should not be empty.";
+    }
 
-const initialState = {
-  name: ""
-};
+    return errors;
+  },
+  handleSubmit: (values, { props, setSubmitting, resetForm }) => {
+    setSubmitting(true);
+    props
+      .onCreate({
+        name: values.name
+      })
+      .then(() => {
+        setSubmitting(false);
+        resetForm();
+      });
 
-export function TodoListForm({ onCreate }) {
-  const [count, setCount] = useState(0);
+    resetForm();
+  }
+})(BaseForm);
 
-  const onSubmit = form =>
-    onCreate({
-      name: form.name
-    }).then(r => {
-      setCount(count + 1);
-    });
-
-  return (
-    <RevalidationForm
-      key={count}
-      rules={validationRules}
-      onSubmit={onSubmit}
-      initialState={initialState}
-      validateSingle={false}
-      validateOnChange={({ submitted }) => submitted}
-    />
-  );
-}
+export const TodoListForm = FormikForm;
