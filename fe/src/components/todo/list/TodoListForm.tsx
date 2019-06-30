@@ -3,7 +3,6 @@ import { withFormik } from "formik";
 import * as Yup from "yup";
 
 const isValid = errorList => !errorList || errorList.length === 0;
-const isNotEmpty = val => val && val.trim().length > 0;
 
 const BaseForm = ({
   values,
@@ -55,8 +54,6 @@ const FormikForm = withFormik({
         setSubmitting(false);
         resetForm();
       });
-
-    resetForm();
   }
 })(BaseForm);
 
