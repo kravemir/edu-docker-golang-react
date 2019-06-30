@@ -11,17 +11,17 @@ import Navigation from "./blocks/navigation";
 import HomePage from "./pages/home";
 import SettingsPage from "./pages/settings";
 
-function updateHtmlStyle() {
+const updateHtmlStyle = function() {
   const { density, theme } = store.getState().settings;
   document.documentElement.className = `bootstrap-scope ${theme}`;
-}
+};
 
 store.subscribe(updateHtmlStyle);
 updateHtmlStyle();
 
 const persistor = getPersistor();
 
-function App() {
+const App = function() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
@@ -33,6 +33,6 @@ function App() {
       </PersistGate>
     </Provider>
   );
-}
+};
 
 render(<App />, document.getElementById("root"));

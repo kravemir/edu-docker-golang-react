@@ -7,7 +7,7 @@ export default (resourceName, dtoToModel, modelToDto) => ({
       .then(response => response.data.map(dtoToModel));
   },
 
-  get(id) {
+  get(id: number) {
     return baseClient
       .get(`${resourceName}/${id}`)
       .then(response => dtoToModel(response.data));
@@ -19,7 +19,7 @@ export default (resourceName, dtoToModel, modelToDto) => ({
       .then(response => dtoToModel(response.data));
   },
 
-  update(id, data) {
+  update(id: number, data) {
     return baseClient
       .put(`${resourceName}/${id}`, modelToDto(data))
       .then(response => dtoToModel(response.data));
